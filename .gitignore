@@ -1,0 +1,20 @@
+# Виртуальное окружение
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+
+# Данные
+data
+#data/*.jpg
+#data/*.csv
+#data/*.xlsx
+#data/*.json
+
+# Системные файлы
+.DS_Store
+.idea/
+.vscode/
+*.log
+
+notebooks/*.mp4
