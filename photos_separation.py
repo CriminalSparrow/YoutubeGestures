@@ -1,40 +1,61 @@
 import os
 import shutil
 import random
-from pathlib import Path
+from tqdm import tqdm
 
-# Параметры
-source_dir = Path('data/photos')
-target_dir = Path('data/split')
-split_ratio = (0.7, 0.15, 0.15)  # train, val, test
+# Путь до исходного датасета
+DATASET_PATH = os.path.join('C:/Users/socol/HaGRIDv2_dataset_512')
 
-# Фиксация random
-random.seed(42)
+# Жесты, которые ты хочешь оставить
+TARGET_GESTURES = ['like', 'dislike', 'palm', 'thumb_index', 'gun', 'timeout', 'stop']
 
-# Создание целевых директорий
+# Папка для нового датасета
+OUTPUT_PATH = 'data/split'
+
+# Процент файлов для валидации и теста
+VAL_RATIO = 0.15
+TEST_RATIO = 0.15
+
+# Создание структуры папок
 for split in ['train', 'val', 'test']:
-    for class_dir in source_dir.iterdir():
-        (target_dir / split / class_dir.name).mkdir(parents=True, exist_ok=True)
+    for gesture in TARGET_GESTURES + ['no gesture']:
+        os.makedirs(os.path.join(OUTPUT_PATH, split, gesture), exist_ok=True)
 
-# Копирование файлов с разбиением
-for class_dir in source_dir.iterdir():
-    images = list(class_dir.glob('*'))
-    random.shuffle(images)
+# Функция для разбиения на train/val/test
+def split_and_copy(file_list, target_dir, gesture):
+    random.shuffle(file_list)
+    n_total = len(file_list)
+    n_val = int(n_total * VAL_RATIO)
+    n_test = int(n_total * TEST_RATIO)
+    
+    val_files = file_list[:n_val]
+    test_files = file_list[n_val:n_val+n_test]
+    train_files = file_list[n_val+n_test:]
 
-    total = len(images)
-    train_end = int(total * split_ratio[0])
-    val_end = train_end + int(total * split_ratio[1])
+    for f in train_files:
+        shutil.copy(f, os.path.join(target_dir, 'train', gesture))
+    for f in val_files:
+        shutil.copy(f, os.path.join(target_dir, 'val', gesture))
+    for f in test_files:
+        shutil.copy(f, os.path.join(target_dir, 'test', gesture))
 
-    split_files = {
-        'train': images[:train_end],
-        'val': images[train_end:val_end],
-        'test': images[val_end:]
-    }
+# Проход по папкам
+all_gestures = os.listdir(DATASET_PATH)
 
-    for split, files in split_files.items():
-        print(f"Started working with{split}")
-        for img in files:
-            shutil.copy(img, target_dir / split / class_dir.name / img.name)
-        print(f"Finished working with{split}")
+for gesture in tqdm(all_gestures, desc="Processing gestures"):
+    gesture_path = os.path.join(DATASET_PATH, gesture)
+    if not os.path.isdir(gesture_path):
+        continue
 
-print("Готово! Данные разбиты и скопированы в 'data/split'.")
+    images = [os.path.join(gesture_path, img) for img in os.listdir(gesture_path) if img.endswith('.jpg') or img.endswith('.png')]
+
+    if gesture in TARGET_GESTURES:
+        # Оставляем все изображения
+        split_and_copy(images, OUTPUT_PATH, gesture)
+    else:
+        # Берем 6% случайных изображений и кидаем в no gesture
+        n_select = max(1, int(len(images) * 0.06))
+        selected_images = random.sample(images, n_select)
+        split_and_copy(selected_images, OUTPUT_PATH, 'no gesture')
+
+print("✅ Разделение завершено!")
