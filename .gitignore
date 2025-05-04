@@ -4,12 +4,13 @@ venv/
 __pycache__/
 *.py[cod]
 
+gesture_env310
+exefile/dist
+exefile/build
+exefile/*.pth
+
 # Данные
 data
-#data/*.jpg
-#data/*.csv
-#data/*.xlsx
-#data/*.json
 
 # Системные файлы
 .DS_Store
@@ -18,3 +19,4 @@ data
 *.log
 
 notebooks/*.mp4
+extension
