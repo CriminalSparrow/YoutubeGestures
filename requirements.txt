@@ -8,3 +8,4 @@ mediapipe
 matplotlib
 tqdm
 pyautogui
+onnx-tf
