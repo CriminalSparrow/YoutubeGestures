@@ -23,7 +23,7 @@
 
 
 Проект собирался на Python 3.10, Windows 11. Конфликт PyInstaller и Python 3.10 решался с помощью ответа MiguelMLR9 https://github.com/pyinstaller/pyinstaller/issues/6301.
-Для сборки проекта pyinstaller build.spec из папки exefile
+Для сборки проекта использовать команду pyinstaller build.spec из папки exefile, предварительно скопировав файл с весами модели .pth в папку exefile.
 
 Библиотеки, необходимые для сборки и работы exe-файла содержатся в exefile/reqs.txt
 
