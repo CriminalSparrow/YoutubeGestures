@@ -35,5 +35,5 @@
 
 Для запуска приложения нужно 
 1. Скачать архив собранного проекта по ссылке https://drive.google.com/file/d/1XjJH1YJq7yKSLrcHPRxucCsBm_WteLKY/view?usp=drive_link, 
-2. Разархивировать,
+2. Разархивировать (проект всего весит около 700мб+),
 3. Запустить YoutubeGesturesApp.exe
