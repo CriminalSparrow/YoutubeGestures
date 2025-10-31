@@ -40,7 +40,6 @@
 3. Запустить YoutubeGesturesApp.exe
 
 Интерфейс приложения:  
-![image](https://github.com/user-attachments/assets/b52f9635-efe7-4e1a-886e-862e5b05f6bf)
 
 
 В будущем можно/нужно реализовать (ToDo):
